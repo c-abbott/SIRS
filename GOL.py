@@ -1,5 +1,5 @@
 import numpy as np
-import matplot.pyplot as plt
+import matplotlib.pyplot as plt
 
 class GOL(object):
     def __init__(self, size, ini):
@@ -73,12 +73,24 @@ class GOL(object):
                     self.lattice[((j-1) % self.size[1]):((j+1) % self.size[1])]) - self.lattice(i, j)
         return nn
     
-    def evolve_state():
-       new_state = np.zeros(self.size)
-       for i in range(self.size[0]):
-           for j in range(self.size[1]):
-               
-
+    def evolve_state(self, indices):
+        new_state = np.zeros(self.size)
+        for i in range(self.size[0]):
+            for j in range(self.size[1]):
+                indices = [i, j]
+                if self.lattice[i][j] == 1:
+                    if self.count_nn(indices) < 2:
+                       new_state[i][j] = 0
+                    elif self.count_nn(indices) > 3:
+                       new_state[i][j] = 0
+                    else:
+                        new_state[i][j] = 1
+                    
+                elif self.lattice[i][j] == 0:
+                    if self.count_nn(indices) == 3:
+                        new_state[i][j] = 1
+                    else:
+                        new_state[i][j] = 0
 
     def animate(self, *args):
         """
