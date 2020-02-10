@@ -1,3 +1,5 @@
+import numpy as np
+
 class GOL(object):
     def __init__(self, size, ini):
         """
@@ -17,36 +19,45 @@ class GOL(object):
             occupied by either an alive or dead cell.
         """
         # Random config.
-        if self.ini == "r":
+        if self.ini == "random":
             self.lattice = np.random.choice(a=[0, 1], size=self.size)
         if self.ini == "oscillator":
             self.lattice = np.zeros(self.size)
+            self.lattice[25:28, 25] = self.create_oscillator
         if self.ini == "glider":
-    
+            self.lattice = np.zeros(self.size)
+            self.lattice[0:3, 0:3] = self.create_glider
+        if self.ini == "beehive":
+            self.lattice = np.zeros(self.size) 
+            self.lattice[25:29, 24:27] = self.create_beehive
+        if self.ini == "square":
+            self.lattice = np.zeros(self.size)
+            self.lattice[25:27, 25] = self.create_square    
     
     def create_glider(self):
         glider = np.zeros((3,3))
         glider[2:] = 1
-        glider[1,2] = 1
-        glider[0,1] = 1
-    
+        glider[1, 2] = 1
+        glider[0, 1] = 1
+        return glider
     
     def create_oscillator(self):
-        oscillator = np.zeros((1,3))
-        oscillator[:] = 1
+        oscillator = np.ones((1,3))
+        return oscillator
     
     def create_beehive(self):
+        beehive = np.zeros((4,3))
+        beehive[0, 1] = 1
+        beehive[3, 1] = 1
+        beehive[2, 0] = 1
+        beehive[1, 0] = 1
+        beehive[2, 2] = 1
+        beehive[1, 2] = 1
+        return beehive
 
-    def
-
-
-
-
-
-
-
-
-
+    def create_square(self):
+        square = np.ones((2, 2))
+        return square
 
     def pbc(self, indices):
         """
@@ -54,11 +65,6 @@ class GOL(object):
             2D lattice.
         """
         return(indices[0] % self.size[0], indices[1] % self.size[1])
-    
-    def evolve(self):
-
-    
-
 
     def animate(self, *args):
         """
