@@ -32,6 +32,8 @@ class GOL(object):
     
     
     def create_oscillator(self):
+        oscillator = np.zeros((1,3))
+        oscillator[:] = 1
     
     def create_beehive(self):
 
