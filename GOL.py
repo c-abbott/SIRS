@@ -1,4 +1,5 @@
 import numpy as np
+import matplot.pyplot as plt
 
 class GOL(object):
     def __init__(self, size, ini):
@@ -32,7 +33,14 @@ class GOL(object):
             self.lattice[25:29, 24:27] = self.create_beehive
         if self.ini == "square":
             self.lattice = np.zeros(self.size)
-            self.lattice[25:27, 25] = self.create_square    
+            self.lattice[25:27, 25] = self.create_square 
+
+    def pbc(self, indices):
+        """
+            Applies periodic boundary conditions (pbc) to a
+            2D lattice.
+        """
+        return(indices[0] % self.size[0], indices[1] % self.size[1])
     
     def create_glider(self):
         glider = np.zeros((3,3))
@@ -59,12 +67,18 @@ class GOL(object):
         square = np.ones((2, 2))
         return square
 
-    def pbc(self, indices):
-        """
-            Applies periodic boundary conditions (pbc) to a
-            2D lattice.
-        """
-        return(indices[0] % self.size[0], indices[1] % self.size[1])
+    def count_nn(self, indices):
+        i, j = indices
+        nn = np.sum(self.lattice[((i-1) % self.size[0]):((i+1) % self.size[0])],
+                    self.lattice[((j-1) % self.size[1]):((j+1) % self.size[1])]) - self.lattice(i, j)
+        return nn
+    
+    def evolve_state():
+       new_state = np.zeros(self.size)
+       for i in range(self.size[0]):
+           for j in range(self.size[1]):
+               
+
 
     def animate(self, *args):
         """
