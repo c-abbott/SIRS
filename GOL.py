@@ -13,7 +13,9 @@ class GOL(object):
         """
         self.size = size
         self.ini = ini
+        self.eqm = False
         self.build_lattice()
+
 
     def build_lattice(self):
         """
@@ -130,6 +132,16 @@ class GOL(object):
     
     def count_live(self):
         return np.sum(self.lattice)
+    
+    def get_com(self):
+        # Determining locations of live cells.
+        x_indices = np.where(self.lattice == 1)[0]
+        y_indices = np.where(self.lattice == 1)[1]
+        # Computing COM based off live cell positions.
+        com_x = 1 / self.count_live * np.sum(x_indices)
+        com_y = 1 / self.count_live * np.sum(y_indices)
+        return np.array([com_x, com_y])
+    
 
     def animate(self, *args):
         """
