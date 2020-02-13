@@ -159,18 +159,49 @@ class GOL(object):
             on the lattice.
         """
         return np.sum(self.lattice)
+
+    def boundary_checker(self, x_indices, y_indices):
+        edge_cross_x = False
+        edge_cross_y = False
+        x_lower = False
+        x_upper = False
+        y_lower = False
+        y_upper = False
+
+        for i in range(x_indices.size):
+            if x_indices[i] < 3:
+                x_lower = True
+            elif x_indices[i] > self.size[0] - 3:
+                x_upper = True
+
+        for j in range(y_indices.size):
+            if y_indices[j] < 3:
+                y_lower = True
+            elif y_indices[i] > self.size[1] - 3:
+                y_upper = True
+
+        if x_lower and x_upper:
+            edge_cross_x = True
+        if y_lower and y_upper:
+            edge_cross_y = True
+        
+        return edge_cross_x, edge_cross_y
     
-    def get_com(self):
+    def get_glider_pos(self):
+        # Determining locations of live cells.
+        x_indices = np.where(self.lattice == 1)[0]
+        y_indices = np.where(self.lattice == 1)[1]
+        return (x_indices, y_indices)
+    
+    def get_com(self, x_indices, y_indices):
         """
             Determines the centre of mass of live cells
             based on a 2D lattice of 1s and 0s.
         """
-        # Determining locations of live cells.
-        x_indices = np.where(self.lattice == 1)[0]
-        y_indices = np.where(self.lattice == 1)[1]
         # Computing COM based off live cell positions.
         com_x = 1 / self.count_live() * np.sum(x_indices)
         com_y = 1 / self.count_live() * np.sum(y_indices)
+
         return np.array([com_x, com_y])
     
     def plot_hist(self, data, num_bins):

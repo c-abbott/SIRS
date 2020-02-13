@@ -41,11 +41,18 @@ def main():
     elif game.ini == 'glider':
         x_pos = []
         y_pos = []
+        times = []
         for i in range(simulations):
             for j in range(10):
                 game.evolve_state()
-            x_pos.append(game.get_com()[0])
-            y_pos.append(game.get_com()[1])
-        game.plot_traj(np.arange(0,simulations,1), x_pos)
+            xs = game.get_glider_pos()[0]
+            ys = game.get_glider_pos()[1]
+            x_checker, y_checker = game.boundary_checker(xs, ys)
+            
+            if x_checker == False and y_checker == False:
+                times.append(i)
+                x_pos.append(game.get_com(xs, ys)[0])
+                y_pos.append(game.get_com(xs, ys)[1])
+        game.plot_traj(times, x_pos)
 
 main()
