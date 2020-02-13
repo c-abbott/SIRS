@@ -159,6 +159,12 @@ class GOL(object):
             on the lattice.
         """
         return np.sum(self.lattice)
+    
+    def check_eqm(self, live_cells):
+        if len(live_cells) > 3:
+                if live_cells[len(live_cells)-1] == live_cells[len(live_cells)-2] \
+                    and live_cells[len(live_cells)-2] == live_cells[len(live_cells)-3]:
+                    self.eqm = True
 
     def boundary_checker(self, x_indices, y_indices):
         edge_cross_x = False
@@ -188,7 +194,10 @@ class GOL(object):
         return edge_cross_x, edge_cross_y
     
     def get_glider_pos(self):
-        # Determining locations of live cells.
+        """
+            Returns a tuple of arrays of 
+            active glider cells.
+        """
         x_indices = np.where(self.lattice == 1)[0]
         y_indices = np.where(self.lattice == 1)[1]
         return (x_indices, y_indices)
@@ -198,11 +207,10 @@ class GOL(object):
             Determines the centre of mass of live cells
             based on a 2D lattice of 1s and 0s.
         """
-        # Computing COM based off live cell positions.
         com_x = 1 / self.count_live() * np.sum(x_indices)
         com_y = 1 / self.count_live() * np.sum(y_indices)
 
-        return np.array([com_x, com_y])
+        return (com_x, com_y)
     
     def plot_hist(self, data, num_bins):
         """
@@ -216,17 +224,29 @@ class GOL(object):
         plt.hist(data, num_bins, facecolor='blue')
         plt.show()
     
-    def plot_traj(self, x_data, y_data):
+    def plot_traj(self, x_data, y_data, all):
         """
             Scatter plotter for glider 
             trajectory.
         """
-        plt.grid()
-        plt.title("GOL Glider trajectory")
-        plt.ylabel("x(t)")
-        plt.xlabel("Time (Sweeps)")
-        plt.scatter(x_data, y_data)
-        plt.show()
+        if all:
+            plt.grid()
+            plt.title("GOL Glider trajectory")
+            plt.ylabel("x(t)")
+            plt.xlabel("Time (Sweeps)")
+            p = np.polyfit(x_data[:18], y_data[:18], 1)
+            y_fit = np.array(x_data[:18])*p[0] + p[1]
+            plt.plot(x_data[:18], y_fit)
+            plt.scatter(x_data[:18], y_data[:18])
+            plt.show()
+            return(p[0])
+        else:
+            plt.grid()
+            plt.title("GOL Glider trajectory")
+            plt.ylabel("x(t)")
+            plt.xlabel("Time (Sweeps)")
+            plt.scatter(x_data[:18], y_data[:18])
+            plt.show()
 
     def animate(self, *args):
         """
