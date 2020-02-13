@@ -38,8 +38,14 @@ def main():
             eqm_times.append(len(live_cells) - 3)
         game.plot_hist(eqm_times,num_bins)
     
-    #elif game.ini == 'glider':
-    #    x_pos = []
-    #    y_pos = []
+    elif game.ini == 'glider':
+        x_pos = []
+        y_pos = []
+        for i in range(simulations):
+            for j in range(10):
+                game.evolve_state()
+            x_pos.append(game.get_com()[0])
+            y_pos.append(game.get_com()[1])
+        game.plot_traj(np.arange(0,simulations,1), x_pos)
 
 main()

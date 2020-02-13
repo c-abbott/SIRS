@@ -142,8 +142,8 @@ class GOL(object):
         x_indices = np.where(self.lattice == 1)[0]
         y_indices = np.where(self.lattice == 1)[1]
         # Computing COM based off live cell positions.
-        com_x = 1 / self.count_live * np.sum(x_indices)
-        com_y = 1 / self.count_live * np.sum(y_indices)
+        com_x = 1 / self.count_live() * np.sum(x_indices)
+        com_y = 1 / self.count_live() * np.sum(y_indices)
         return np.array([com_x, com_y])
     
     def plot_hist(self, data, num_bins):
@@ -152,6 +152,14 @@ class GOL(object):
         plt.xlabel("Time (Sweeps)")
         plt.ylabel("Frequency") 
         plt.hist(data, num_bins, facecolor='blue')
+        plt.show()
+    
+    def plot_traj(self, x_data, y_data):
+        plt.grid()
+        plt.title("GOL Glider trajectory")
+        plt.ylabel("x(t)")
+        plt.xlabel("Time (Sweeps)")
+        plt.scatter(x_data, y_data)
         plt.show()
 
     def animate(self, *args):
