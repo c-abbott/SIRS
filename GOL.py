@@ -25,15 +25,19 @@ class GOL(object):
         # Random config.
         if self.ini == "random":
             self.lattice = np.random.choice(a=[0, 1], size=self.size)
+        # Oscillator config.
         if self.ini == "oscillator":
             self.lattice = np.zeros(self.size)
             self.lattice[25:28, 25] = self.create_oscillator()
+        # Glider config.
         if self.ini == "glider":
             self.lattice = np.zeros(self.size)
             self.lattice[0:3, 0:3] = self.create_glider()
+        # Beehive config.
         if self.ini == "beehive":
             self.lattice = np.zeros(self.size) 
             self.lattice[25:29, 24:27] = self.create_beehive()
+        # Square config.
         if self.ini == "square":
             self.lattice = np.zeros(self.size)
             self.lattice[25:27, 25] = self.create_square()
@@ -46,6 +50,10 @@ class GOL(object):
         return(indices[0] % self.size[0], indices[1] % self.size[1])
     
     def create_glider(self):
+        """
+            Creates an array in the shape
+            of a GOL glider.
+        """
         glider = np.zeros((3,3))
         glider[2:] = 1
         glider[1, 2] = 1
@@ -53,10 +61,18 @@ class GOL(object):
         return glider
     
     def create_oscillator(self):
+        """
+            Creates an array in the shape
+            of a GOL blinker.
+        """
         oscillator = np.ones((1,3))
         return oscillator
     
     def create_beehive(self):
+        """
+            Creates an array in the shape
+            of a GOL beehive.
+        """
         beehive = np.zeros((4,3))
         beehive[0, 1] = 1
         beehive[3, 1] = 1
@@ -67,6 +83,10 @@ class GOL(object):
         return beehive
 
     def create_square(self):
+        """
+            Creates an array in the shape
+            of a GOL square.
+        """
         square = np.ones((2, 2))
         return square
 
@@ -110,6 +130,9 @@ class GOL(object):
         return(nearestNeighbours)
     
     def evolve_state(self):
+        """
+            Parallel updating scheme for the GOL.
+        """
         new_state = np.zeros(self.size)
         for i in range(self.size[0]):
             for j in range(self.size[1]):
@@ -131,6 +154,10 @@ class GOL(object):
         self.lattice = new_state
     
     def count_live(self):
+        """
+            Returns the total number of live cells
+            on the lattice.
+        """
         return np.sum(self.lattice)
     
     def get_com(self):
@@ -147,6 +174,10 @@ class GOL(object):
         return np.array([com_x, com_y])
     
     def plot_hist(self, data, num_bins):
+        """
+            Histogram plotter for 
+            steady state times.
+        """
         plt.grid()
         plt.title("Histogram of GOL EQM Times")
         plt.xlabel("Time (Sweeps)")
@@ -155,6 +186,10 @@ class GOL(object):
         plt.show()
     
     def plot_traj(self, x_data, y_data):
+        """
+            Scatter plotter for glider 
+            trajectory.
+        """
         plt.grid()
         plt.title("GOL Glider trajectory")
         plt.ylabel("x(t)")
