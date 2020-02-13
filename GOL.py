@@ -161,12 +161,20 @@ class GOL(object):
         return np.sum(self.lattice)
     
     def check_eqm(self, live_cells):
+        """
+            Checks if we are in the steady state 
+            for the GOL.
+        """
         if len(live_cells) > 3:
                 if live_cells[len(live_cells)-1] == live_cells[len(live_cells)-2] \
                     and live_cells[len(live_cells)-2] == live_cells[len(live_cells)-3]:
                     self.eqm = True
 
     def boundary_checker(self, x_indices, y_indices):
+        """
+            Checks if glider position is near the edge
+            of the lattice.
+        """
         edge_cross_x = False
         edge_cross_y = False
         x_lower = False
@@ -221,7 +229,7 @@ class GOL(object):
         plt.title("Histogram of GOL EQM Times")
         plt.xlabel("Time (Sweeps)")
         plt.ylabel("Frequency") 
-        plt.hist(data, num_bins, facecolor='blue')
+        plt.hist(data, num_bins, facecolor='green')
         plt.show()
     
     def plot_traj(self, x_data, y_data, all):
@@ -229,7 +237,7 @@ class GOL(object):
             Scatter plotter for glider 
             trajectory.
         """
-        if all:
+        if all == False:
             plt.grid()
             plt.title("GOL Glider trajectory")
             plt.ylabel("x(t)")
@@ -245,7 +253,7 @@ class GOL(object):
             plt.title("GOL Glider trajectory")
             plt.ylabel("x(t)")
             plt.xlabel("Time (Sweeps)")
-            plt.scatter(x_data[:18], y_data[:18])
+            plt.scatter(x_data, y_data)
             plt.show()
 
     def animate(self, *args):
