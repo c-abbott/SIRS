@@ -112,21 +112,24 @@ class GOL(object):
         for i in range(self.size[0]):
             for j in range(self.size[1]):
                 indices = [i, j]
-                if self.lattice[i][j] == 1:
+                if self.lattice[i, j] == 1:
                     if self.count_nn(indices) < 2:
-                        new_state[i][j] = 0
+                        new_state[i, j] = 0
                     elif self.count_nn(indices) > 3:
-                        new_state[i][j] = 0
+                        new_state[i, j] = 0
                     else:
-                        new_state[i][j] = 1
+                        new_state[i, j] = 1
                     
-                elif self.lattice[i][j] == 0:
+                elif self.lattice[i, j] == 0:
                     if self.count_nn(indices) == 3:
-                        new_state[i][j] = 1
+                        new_state[i, j] = 1
                     else:
-                        new_state[i][j] = 0
+                        new_state[i, j] = 0
 
         self.lattice = new_state
+    
+    def count_live(self):
+        return np.sum(self.lattice)
 
     def animate(self, *args):
         """
