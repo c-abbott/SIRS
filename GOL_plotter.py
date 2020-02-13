@@ -19,6 +19,7 @@ def main():
         simulations = int(items[0]) # No. of simulations.
         ini_cond = str(items[1])    # Initial conditions.
         lattice_size = (int(items[2]), int(items[2]))  # Lattice size.
+        num_bins = int(items[3])
 
     game = GOL(size=lattice_size, ini=ini_cond)
 
@@ -35,8 +36,10 @@ def main():
                     if live_cells[len(live_cells)-1] == live_cells[len(live_cells)-2] and live_cells[len(live_cells)-2] == live_cells[len(live_cells)-3]:
                         game.eqm = True
             eqm_times.append(len(live_cells) - 3)
-            print(eqm_times[i])
+        game.plot_hist(eqm_times,num_bins)
     
     #elif game.ini == 'glider':
+    #    x_pos = []
+    #    y_pos = []
 
 main()

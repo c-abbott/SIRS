@@ -134,6 +134,10 @@ class GOL(object):
         return np.sum(self.lattice)
     
     def get_com(self):
+        """
+            Determines the centre of mass of live cells
+            based on a 2D lattice of 1s and 0s.
+        """
         # Determining locations of live cells.
         x_indices = np.where(self.lattice == 1)[0]
         y_indices = np.where(self.lattice == 1)[1]
@@ -142,6 +146,13 @@ class GOL(object):
         com_y = 1 / self.count_live * np.sum(y_indices)
         return np.array([com_x, com_y])
     
+    def plot_hist(self, data, num_bins):
+        plt.grid()
+        plt.title("Histogram of GOL EQM Times")
+        plt.xlabel("Time (Sweeps)")
+        plt.ylabel("Frequency") 
+        plt.hist(data, num_bins, facecolor='blue')
+        plt.show()
 
     def animate(self, *args):
         """
