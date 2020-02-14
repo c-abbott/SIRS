@@ -35,9 +35,16 @@ class SIRS(object):
         return(indices[0] % self.size[0], indices[1] % self.size[1])
 
     def get_random(self):
+        """
+            Random number generator.
+        """
         return (np.random.uniform(0, 1))
 
     def check_infected(self, indices):
+        """
+            Checks for infected neareast neighbours
+            in SIRS model.
+        """
         i, j = indices
         n_n = self.lattice[(i - 1) % self.size[0], j]
         n_e = self.lattice[i, (j + 1) % self.size[1]]
@@ -55,6 +62,9 @@ class SIRS(object):
             return False
 
     def update_SIRS(self):
+        """
+            SIRS update algorithm.
+        """
         indices = (np.random.randint(0, self.size[0]),
                    np.random.randint(0, self.size[1]))
 
