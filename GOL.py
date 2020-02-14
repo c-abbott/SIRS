@@ -35,7 +35,7 @@ class GOL(object):
             self.lattice[0:3, 0:3] = self.create_glider()
         # Beehive config.
         if self.ini == "beehive":
-            self.lattice = np.zeros(self.size) 
+            self.lattice = np.zeros(self.size)
             self.lattice[25:29, 24:27] = self.create_beehive()
         # Square config.
         if self.ini == "square":
@@ -48,7 +48,7 @@ class GOL(object):
             2D lattice.
         """
         return(indices[0] % self.size[0], indices[1] % self.size[1])
-    
+
     def create_glider(self):
         """
             Creates an array in the shape
@@ -59,7 +59,7 @@ class GOL(object):
         glider[1, 2] = 1
         glider[0, 1] = 1
         return glider
-    
+
     def create_oscillator(self):
         """
             Creates an array in the shape
@@ -67,7 +67,7 @@ class GOL(object):
         """
         oscillator = np.ones((1,3))
         return oscillator
-    
+
     def create_beehive(self):
         """
             Creates an array in the shape
@@ -128,7 +128,7 @@ class GOL(object):
             nearestNeighbours += 1
 
         return(nearestNeighbours)
-    
+
     def evolve_state(self):
         """
             Parallel updating scheme for the GOL.
@@ -144,7 +144,7 @@ class GOL(object):
                         new_state[i, j] = 0
                     else:
                         new_state[i, j] = 1
-                    
+
                 elif self.lattice[i, j] == 0:
                     if self.count_nn(indices) == 3:
                         new_state[i, j] = 1
@@ -152,17 +152,17 @@ class GOL(object):
                         new_state[i, j] = 0
 
         self.lattice = new_state
-    
+
     def count_live(self):
         """
             Returns the total number of live cells
             on the lattice.
         """
         return np.sum(self.lattice)
-    
+
     def check_eqm(self, live_cells):
         """
-            Checks if we are in the steady state 
+            Checks if we are in the steady state
             for the GOL.
         """
         if len(live_cells) > 3:
@@ -198,18 +198,18 @@ class GOL(object):
             edge_cross_x = True
         if y_lower and y_upper:
             edge_cross_y = True
-        
+
         return edge_cross_x, edge_cross_y
-    
+
     def get_glider_pos(self):
         """
-            Returns a tuple of arrays of 
+            Returns a tuple of arrays of
             active glider cells.
         """
         x_indices = np.where(self.lattice == 1)[0]
         y_indices = np.where(self.lattice == 1)[1]
         return (x_indices, y_indices)
-    
+
     def get_com(self, x_indices, y_indices):
         """
             Determines the centre of mass of live cells
@@ -219,22 +219,22 @@ class GOL(object):
         com_y = 1 / self.count_live() * np.sum(y_indices)
 
         return (com_x, com_y)
-    
+
     def plot_hist(self, data, num_bins):
         """
-            Histogram plotter for 
+            Histogram plotter for
             steady state times.
         """
         plt.grid()
         plt.title("Histogram of GOL EQM Times")
         plt.xlabel("Time (Sweeps)")
-        plt.ylabel("Frequency") 
+        plt.ylabel("Frequency")
         plt.hist(data, num_bins, facecolor='green')
         plt.show()
-    
+
     def plot_traj(self, x_data, y_data, all):
         """
-            Scatter plotter for glider 
+            Scatter plotter for glider
             trajectory.
         """
         if all == False:
@@ -277,5 +277,3 @@ class GOL(object):
         self.animation = animation.FuncAnimation(
             self.figure, self.animate, repeat=False, frames=sweeps, interval=25, blit=True)
         plt.show()
-
-
