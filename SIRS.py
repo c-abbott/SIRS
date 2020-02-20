@@ -104,6 +104,9 @@ class SIRS(object):
         return np.mean(observables)
 
     def plot_phase_diagram(self, matrix):
+        """
+            Phase diagram plotter.
+        """
         plt.title('p1-p3 Phase Diagram')
         plt.xlabel('p1 (S --> I)')
         plt.ylabel('p3 (R --> S)')
