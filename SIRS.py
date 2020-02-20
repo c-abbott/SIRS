@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
+
 class SIRS(object):
     def __init__(self, size, ini, p1, p2, p3):
         """
@@ -83,6 +84,25 @@ class SIRS(object):
             if r_3 <= self.p3:
                 self.lattice[indices] = -1
 
+    def get_infected_frac(self):
+        """
+            Class method to calculate the fraction
+            of infected sites in the SIRS model.
+        """
+        infected = 0
+        for i in range(self.size[0]):
+            for j in range(self.size[1]):
+                if self.lattice[i, j] == 0:
+                    infected += 1
+        return (infected / (self.size[0]*self.size[1]))
+    
+    def get_avg_obs(self, observables):
+        """
+            A function to calculate the average of a list
+            of observables.
+        """
+        return np.mean(observables)
+
     def animate(self, *args):
         """
             Creates, saves and returns image of the current state of
@@ -102,5 +122,5 @@ class SIRS(object):
         self.figure = plt.figure()
         self.image = plt.imshow(self.lattice, cmap='jet', animated=True)
         self.animation = animation.FuncAnimation(self.figure, self.animate, repeat=False, frames=sweeps, interval=50, blit=True)
-        plt.colorbar(ticks=np.linspace(-1,1,3))
+        plt.colorbar(ticks=np.linspace(-1, 1, 3))
         plt.show()
