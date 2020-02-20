@@ -89,45 +89,43 @@ class GOL(object):
         """
         square = np.ones((2, 2))
         return square
+    
+    def count_nn(self, indices):
+        """
+            Count the value of 8 nearest neighbours 
+            in the Game of Life.
+        """
+        i, j = indices
+        nearest_neighbours = 0
 
-    def count_nn(self, site):
-        #i, j = indices
-        #nn = np.sum(self.lattice[(i-1) % self.size[0]:(j+1) % self.size[0],
-        #                         (j-1) % self.size[0]:(i+1) % self.size[0]]) - self.lattice[i, j]
-        #return nn
-        nearestNeighbours = 0
+        n_n = self.lattice[(i - 1) % self.size[1], j]
+        n_ne = self.lattice[(i - 1) %
+                            self.size[1], (j + 1) % self.size[0]]
+        n_e = self.lattice[i, (j + 1) % self.size[0]]
+        n_se = self.lattice[(i + 1) % self.size[1], (j + 1) % self.size[0]]
+        n_s = self.lattice[(i + 1) % self.size[1], j]
+        n_sw = self.lattice[(i + 1) % self.size[1], (j - 1) % self.size[0]]
+        n_w = self.lattice[i, (j - 1) % self.size[0]]
+        n_nw = self.lattice[(i - 1) % self.size[1], (j - 1) % self.size[0]]
 
-        neighbourNorth = self.lattice[(site[0] - 1) % self.size[0], site[1]]
-        neighbourNorthEast = self.lattice[(
-            site[0] - 1) % self.size[0], (site[1] + 1) % self.size[0]]
-        neighbourEast = self.lattice[site[0], (site[1] + 1) % self.size[0]]
-        neighbourSouthEast = self.lattice[(
-            site[0] + 1) % self.size[0], (site[1] + 1) % self.size[0]]
-        neighbourSouth = self.lattice[(site[0] + 1) % self.size[0], site[1]]
-        neighbourSouthWest = self.lattice[(
-            site[0] + 1) % self.size[0], (site[1] - 1) % self.size[0]]
-        neighbourWest = self.lattice[site[0], (site[1] - 1) % self.size[0]]
-        neighbourNorthWest = self.lattice[(
-            site[0] - 1) % self.size[0], (site[1] - 1) % self.size[0]]
-
-        if neighbourNorth == 1:
-            nearestNeighbours += 1
-        if neighbourNorthEast == 1:
-            nearestNeighbours += 1
-        if neighbourEast == 1:
-            nearestNeighbours += 1
-        if neighbourSouthEast == 1:
-            nearestNeighbours += 1
-        if neighbourSouth == 1:
-            nearestNeighbours += 1
-        if neighbourSouthWest == 1:
-            nearestNeighbours += 1
-        if neighbourWest == 1:
-            nearestNeighbours += 1
-        if neighbourNorthWest == 1:
-            nearestNeighbours += 1
-
-        return(nearestNeighbours)
+        if n_n == 1:
+            nearest_neighbours += 1
+        if n_ne == 1:
+            nearest_neighbours += 1
+        if n_e == 1:
+            nearest_neighbours += 1
+        if n_se == 1:
+            nearest_neighbours += 1
+        if n_s == 1:
+            nearest_neighbours += 1
+        if n_sw == 1:
+            nearest_neighbours += 1
+        if n_w == 1:
+            nearest_neighbours += 1
+        if n_nw == 1:
+            nearest_neighbours += 1
+        
+        return nearest_neighbours
 
     def evolve_state(self):
         """
