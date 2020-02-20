@@ -2,7 +2,6 @@ from GOL import GOL
 import numpy as np
 import sys
 
-
 def main():
     if len(sys.argv) != 2:
         print("Wrong number of arguments.")
@@ -31,6 +30,7 @@ def main():
             live_cells = []
             game = GOL(size=lattice_size, ini=ini_cond)
             while game.eqm == False:
+                # Evolve state.
                 game.evolve_state()
                 # Count number of live cells in state.
                 live_cells.append(game.count_live())
@@ -41,6 +41,11 @@ def main():
             print (eqm_times[i])
         # Plotting.
         game.plot_hist(eqm_times, np.arange(0, 2500, 100))
+
+        # Writing to file.
+        with open("gol_eqm_hist.dat", "w+") as f:
+            for time in eqm_times:
+                f.write('%lf\n' % time)
 
     elif game.ini == 'glider':
         # Initialising data storage.
@@ -67,6 +72,9 @@ def main():
         vel = game.plot_traj(times, x_pos, all=plot_all)
         if plot_all == False:
             print("The velocity of the glider is " + str(vel) + " cells / sweep")
-
-
+        
+        # Writing to a file.
+        with open("gol_glider.dat", "w+") as f:
+            f.writelines(map("{}, {}, {}\n".format, times, x_pos, y_pos))
+        
 main()
