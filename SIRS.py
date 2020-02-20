@@ -107,11 +107,12 @@ class SIRS(object):
         """
             Phase diagram plotter.
         """
-        plt.title('p1-p3 Phase Diagram')
+        plt.title('p1-p3 Phase Diagram with p2 = 0.5')
         plt.xlabel('p1 (S --> I)')
         plt.ylabel('p3 (R --> S)')
         plt.pcolormesh(matrix)
         plt.colorbar()
+        plt.savefig("phase_diagram.png")
         plt.show()
 
     def animate(self, *args):
