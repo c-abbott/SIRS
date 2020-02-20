@@ -103,6 +103,14 @@ class SIRS(object):
         """
         return np.mean(observables)
 
+    def plot_phase_diagram(self, matrix):
+        plt.title('p1-p3 Phase Diagram')
+        plt.xlabel('p1 (S --> I)')
+        plt.ylabel('p3 (R --> S)')
+        plt.pcolormesh(matrix)
+        plt.colorbar()
+        plt.show()
+
     def animate(self, *args):
         """
             Creates, saves and returns image of the current state of
