@@ -10,14 +10,14 @@ def main():
     else:
         infile_parameters = sys.argv[1]
 
-     # open input file and assinging parameters
+    # Open input file and assinging parameters.
     with open(infile_parameters, "r") as input_file:
-        # read the lines of the input data file
+        # Read the lines of the input data file
         line = input_file.readline()
         items = line.split(", ")
 
         simulations = int(items[0])  # No. of simulations.
-        ini_cond = str(items[1])    # Initial conditions.
+        ini_cond = str(items[1])     # Initial conditions.
         lattice_size = (int(items[2]), int(items[2]))  # Lattice size.
 
     game = GOL(size=lattice_size, ini=ini_cond)
