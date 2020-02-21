@@ -103,16 +103,22 @@ class SIRS(object):
         """
         return np.mean(observables)
 
-    def plot_phase_diagram(self, matrix, points):
+    def plot_phase_diagram(self, matrix, prob_step):
         """
-            Phase diagram plotter.
+            Phase diagram plotter - Each axis domain must be from
+            0 to 1 i.e. probabilities.
         """
+        pmin = 0.0
+        pmax = 1.05
+        dp = prob_step
+        p1s_plot,p3s_plot = np.meshgrid(np.arange(pmin,pmax+dp,dp)-dp/2.,np.arange(pmin,pmax+dp,dp)-dp/2.)
         plt.title('p1-p3 Phase Diagram with p2 = 0.5')
         plt.xlabel('p1 (S --> I)')
         plt.ylabel('p3 (R --> S)')
-        plt.xticks(np.arange(0, 1+(1/points), points))
-        plt.yticks(np.arange(0, 1+(1/points), points))
-        plt.pcolormesh(matrix)
+        plt.pcolormesh(p1s_plot, p3s_plot, matrix)
+        plt.axis([p1s_plot.min(),p1s_plot.max(),p3s_plot.min(),p3s_plot.max()])
+        plt.xticks(np.arange(pmin,pmax,dp*2))
+        plt.yticks(np.arange(pmin,pmax,dp*2))
         plt.colorbar()
         plt.savefig("phase_diagram.png")
         plt.show()
