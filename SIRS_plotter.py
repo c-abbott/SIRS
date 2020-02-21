@@ -23,8 +23,9 @@ def main():
         sweeps = int(items[5])     # No. of sweeps.
 
     # Initialising probability domains.
-    p1s = np.arange(0.0, 1.0+p_step, p_step)
-    p3s = np.arange(0.0, 1.0+p_step, p_step)
+    p1s = np.arange(0.0, 1.0 + p_step, p_step)
+    #print(p1s.size)
+    p3s = np.arange(0.0, 1.0 + p_step, p_step)
     # Initialising phase matrix.
     phase_matrix = np.zeros((p1s.size, p3s.size))
 
@@ -46,9 +47,9 @@ def main():
             # Data collection.
             psi_per_p1.append(simulation.get_avg_obs(psi_per_p3))
         # Update matrix columns.
-        phase_matrix[:, int(p1*p1s.size)] = psi_per_p1[::-1]
+        phase_matrix[:, int(p1*(p1s.size-1))] = psi_per_p1[::-1]
     # Plotting.
-    simulation.plot_phase_diagram(phase_matrix, p1s.size)
+    simulation.plot_phase_diagram(phase_matrix, p_step)
     # Writing to file.
     np.savetxt("phase_data.dat", phase_matrix, fmt='%1.5f', delimiter=' ')
 main()
