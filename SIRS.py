@@ -122,7 +122,7 @@ class SIRS(object):
         plt.title('p1-p3 Phase Diagram with p2 = 0.5')
         plt.xlabel('p1 (S --> I)')
         plt.ylabel('p3 (R --> S)')
-        plt.pcolormesh(p1s_plot, p3s_plot, matrix)
+        plt.pcolormesh(p1s_plot, p3s_plot, matrix, cmap='hot')
         plt.axis([p1s_plot.min(),p1s_plot.max(),p3s_plot.min(),p3s_plot.max()])
         plt.xticks(np.arange(pmin,pmax,dp*2))
         plt.yticks(np.arange(pmin,pmax,dp*2))
