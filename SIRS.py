@@ -94,11 +94,18 @@ class SIRS(object):
             for j in range(self.size[1]):
                 if self.lattice[i, j] == 0:
                     infected += 1
-        return (infected / (self.size[0]*self.size[1]))
+        return (infected)
+    
+    def get_infected_var(self, observables):
+        """
+            A method to calculate the variance of a list
+            of observables.
+        """
+        return (np.var(observables))
     
     def get_avg_obs(self, observables):
         """
-            A function to calculate the average of a list
+            A method to calculate the average of a list
             of observables.
         """
         return np.mean(observables)
@@ -122,7 +129,7 @@ class SIRS(object):
         plt.colorbar()
         plt.savefig("phase_diagram.png")
         plt.show()
-
+    
     def animate(self, *args):
         """
             Creates, saves and returns image of the current state of
