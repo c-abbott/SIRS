@@ -47,7 +47,9 @@ def main():
             # Data collection.
             psi_per_p1.append(simulation.get_avg_obs(psi_per_p3))
         # Update matrix columns.
-        phase_matrix[:, int(p1*(p1s.size-1))] = psi_per_p1[::-1]
+        #phase_matrix[:, int(p1*(p1s.size-1))] = psi_per_p1[::-1]
+        phase_matrix[:, int(p1*(p1s.size-1))] = psi_per_p1
+
     # Plotting.
     simulation.plot_phase_diagram(phase_matrix, p_step)
     # Writing to file.
