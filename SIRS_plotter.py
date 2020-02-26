@@ -45,7 +45,11 @@ def main():
                 for j in range(simulation.size[0]*simulation.size[1]):
                     simulation.update_SIRS()
                 if sweep >= eqm_sweeps:
-                    psi_per_p3.append(simulation.get_infected_frac())
+                    psi = simulation.get_infected_frac()
+                    if psi != 0:
+                        psi_per_p3.append(psi)
+                    else:
+                        break
             # Data collection.
             psi_per_p1.append(simulation.get_avg_obs(
                 psi_per_p3) / (simulation.size[0]*simulation.size[1]))
@@ -54,7 +58,7 @@ def main():
         # Update matrix columns.
         phase_matrix[:, int(p1*(p1s.size-1))] = psi_per_p1
         var_matrix[:, int(p1*(p1s.size-1))] = var_data
-
+    
     # Plotting.
     simulation.plot_phase_diagram(phase_matrix, p_step)
     simulation.plot_phase_diagram(var_matrix, p_step)
