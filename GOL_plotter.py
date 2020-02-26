@@ -52,7 +52,7 @@ def main():
         x_pos = []
         y_pos = []
         times = []
-        plot_all = False
+        plot_all = True
         # Simulation begins.
         for i in range(simulations):
             for j in range(10):
@@ -65,8 +65,8 @@ def main():
             # Store COM pos if not at lattice boundary.
             if x_checker == False and y_checker == False:
                 times.append(i)
-                x_pos.append(game.get_com(xs, ys)[0])
-                y_pos.append(game.get_com(xs, ys)[1])
+                x_pos.append(game.get_com(xs, ys)[0] / 10)
+                y_pos.append(game.get_com(xs, ys)[1] / 10)
 
         # Printing glider velocity.
         vel = game.plot_traj(times, x_pos, all=plot_all)
