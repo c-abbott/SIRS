@@ -61,7 +61,8 @@ def main():
     
     # Plotting.
     simulation.plot_phase_diagram(phase_matrix, p_step)
-    simulation.plot_phase_diagram(var_matrix, p_step)
+    simulation.plot_variance_contour(var_matrix, p_step)
+    
     # Writing to file.
     np.savetxt("phase_data.dat", phase_matrix, fmt='%1.5f', delimiter=' ')
     np.savetxt("var_data.dat", var_matrix, fmt='%1.5f', delimiter=' ')
