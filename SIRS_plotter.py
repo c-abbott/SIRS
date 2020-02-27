@@ -45,11 +45,12 @@ def main():
                 for j in range(simulation.size[0]*simulation.size[1]):
                     simulation.update_SIRS()
                 if sweep >= eqm_sweeps:
-                    psi = simulation.get_infected_frac()
-                    if psi != 0:
-                        psi_per_p3.append(psi)
-                    else:
-                        break
+                    psi_per_p3.append(simulation.get_infected_frac())
+                    #psi = simulation.get_infected_frac()
+                    #if psi != 0:
+                    #    psi_per_p3.append(psi)
+                    #else:
+                    #    break
             # Data collection.
             psi_per_p1.append(simulation.get_avg_obs(
                 psi_per_p3) / (simulation.size[0]*simulation.size[1]))
