@@ -115,17 +115,17 @@ class SIRS(object):
             Phase diagram plotter - Each axis domain must be from
             0 to 1 i.e. probabilities.
         """
-        pmin = 0.0
-        pmax = 1.025
         dp = prob_step
+        pmin = 0.0
+        pmax = 1.0 + dp
         p1s_plot,p3s_plot = np.meshgrid(np.arange(pmin,pmax+dp,dp)-dp/2.,np.arange(pmin,pmax+dp,dp)-dp/2.)
         plt.title('p1-p3 Phase Diagram with p2 = 0.5')
         plt.xlabel('p1 (S --> I)')
         plt.ylabel('p3 (R --> S)')
         plt.pcolormesh(p1s_plot, p3s_plot, matrix, cmap='hot')
         plt.axis([p1s_plot.min(),p1s_plot.max(),p3s_plot.min(),p3s_plot.max()])
-        plt.xticks(np.arange(pmin,pmax,dp*4))
-        plt.yticks(np.arange(pmin,pmax,dp*4))
+        plt.xticks(np.arange(pmin,pmax,0.1))
+        plt.yticks(np.arange(pmin,pmax,0.1))
         plt.colorbar()
         plt.savefig("phase_diagram.png")
         plt.show()
@@ -135,17 +135,17 @@ class SIRS(object):
             Phase diagram plotter - Each axis domain must be from
             0 to 1 i.e. probabilities.
         """
-        pmin = 0.0
-        pmax = 1.025
         dp = prob_step
+        pmin = 0.0
+        pmax = 1.0 + prob_step
         p1s_plot,p3s_plot = np.meshgrid(np.arange(pmin,pmax+dp,dp)-dp/2.,np.arange(pmin,pmax+dp,dp)-dp/2.)
         plt.title('Variance Contour Plot Vs. p1, p3 (p2 = 0.5)')
         plt.xlabel('p1 (S --> I)')
         plt.ylabel('p3 (R --> S)')
         plt.pcolormesh(p1s_plot, p3s_plot, matrix, cmap='hot')
         plt.axis([p1s_plot.min(),p1s_plot.max(),p3s_plot.min(),p3s_plot.max()])
-        plt.xticks(np.arange(pmin,pmax,dp*4))
-        plt.yticks(np.arange(pmin,pmax,dp*4))
+        plt.xticks(np.arange(pmin,pmax,0.1))
+        plt.yticks(np.arange(pmin,pmax,0.1))
         plt.colorbar()
         plt.savefig("variance_contour.png")
         plt.show()
