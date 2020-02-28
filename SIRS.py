@@ -160,6 +160,7 @@ class SIRS(object):
         plt.xlabel('p1 (S --> I)')
         plt.ylabel('Variance')
         plt.errorbar(x_data, var_data, yerr = error_data)
+        plt.savefig("variance_plot.png")
         plt.show()
 
     def bootstrap(self, psis, samples):
