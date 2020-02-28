@@ -75,13 +75,11 @@ def main():
 
     elif desired_plot == 'variance_plot':
         # Initialising probability domains.
-        p1s = np.arange(0.2, 0.5 + p_step, p_step)
+        p1s = np.arange(0.2, 0.51, 0.01)
         p3 = 0.5
-
         # Data storage.
         var_array = np.zeros(p1s.size)
         error_array = np.zeros(p1s.size)
-
         # Simulation begins.
         for i in range(p1s.size):
             print(p1s[i])
@@ -91,7 +89,7 @@ def main():
             simulation = SIRS(size=lattice_size,
                               ini=ini_cond, p1=p1s[i], p2=p2, p3=p3)
             # Sweeping.
-            for sweep in range(sweeps * 10):
+            for sweep in range(10000):
                 for j in range(simulation.size[0]*simulation.size[1]):
                         simulation.update_SIRS()
                 if sweep >= eqm_sweeps:
@@ -99,9 +97,14 @@ def main():
             # Update arrays.
             var_array[i] = simulation.get_infected_var(psis) / \
                 (simulation.size[0] * simulation.size[1])
-            error_array[i] = simulation.bootstrap(psis, sweeps) / (simulation.size[0] * simulation.size[1])
+            error_array[i] = simulation.bootstrap(psis, 100) / \
+                (simulation.size[0] * simulation.size[1])
         # Plotting.
         simulation.plot_figure(p1s, var_array, error_array)
+
+        # Writing to a file.
+        with open("var_cut.dat", "w+") as f:
+            f.writelines(map("{}, {}, {}\n".format, p1s, var_array, error_array))
 
     elif desired_plot == 'immunity':
         # Initialising probabilities.
@@ -109,7 +112,7 @@ def main():
         p3 = 0.5
         # Initialising x domain.
         im_fracs = np.arange(0.0, 0.505, 0.05)
-        print(im_fracs.size)
+        # Data storage.
         overall_psis = []
         errors = []
         for k in range(5):
