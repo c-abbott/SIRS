@@ -16,7 +16,7 @@ def main():
         line = input_file.readline()
         items = line.split(", ")
         # Lattice size.
-        lattice_size = (int(items[0]), int(items[0])) 
+        lattice_size = (int(items[0]), int(items[0]))
         desired_plot = str(items[1]) # Desired plot.
         ini_cond = str(items[2])     # Initial conditions.
         p2 = float(items[3])         # P(I --> R).
@@ -62,38 +62,43 @@ def main():
             # Update matrix columns.
             phase_matrix[:, int(p1*(p1s.size-1))] = psi_per_p1
             var_matrix[:, int(p1*(p1s.size-1))] = var_data
-        
+
         # Plotting.
         simulation.plot_phase_diagram(phase_matrix, p_step)
         simulation.plot_variance_contour(var_matrix, p_step)
-        
+
         # Writing to file.
         np.savetxt("phase_data.dat", phase_matrix, fmt='%1.5f', delimiter=' ')
         np.savetxt("var_data.dat", var_matrix, fmt='%1.5f', delimiter=' ')
-    
+
     elif desired_plot == 'variance_plot':
         # Initialising probability domains.
-        p1s = np.arange(0.0, 1.0 + p_step, p_step)
+        p1s = np.arange(0.2, 0.5 + p_step, p_step)
         p3 = 0.5
+
         # Data storage.
         var_array = np.zeros(p1s.size)
+        error_array = np.zeros(p1s.size)
+
         # Simulation begins.
-        for p1 in p1s:
-            print(p1)
+        for i in range(p1s.size):
+            print(p1s[i])
+            # Data storage.
             psis = []
+            # New simulation.
             simulation = SIRS(size=lattice_size,
-                              ini=ini_cond, p1=p1, p2=p2, p3=p3)
+                              ini=ini_cond, p1=p1s[i], p2=p2, p3=p3)
+            # Sweeping.
             for sweep in range(sweeps * 10):
                 for j in range(simulation.size[0]*simulation.size[1]):
                         simulation.update_SIRS()
                 if sweep >= eqm_sweeps:
                         psis.append(simulation.get_infected_frac())
-            var_array[int(p1*(p1s.size-1))] = simulation.get_infected_var(psis) / \
+            # Update arrays.
+            var_array[i] = simulation.get_infected_var(psis) / \
                 (simulation.size[0] * simulation.size[1])
+            error_array[i] = simulation.bootstrap(psis, sweeps) / (simulation.size[0] * simulation.size[1])
         # Plotting.
-        simulation.plot_variance(p1s, var_array)
-            
+        simulation.plot_figure(p1s, var_array, error_array)
+
 main()
-
-
-        
