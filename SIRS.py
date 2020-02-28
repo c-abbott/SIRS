@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import math
 
 
 class SIRS(object):
@@ -95,14 +96,14 @@ class SIRS(object):
                 if self.lattice[i, j] == 0:
                     infected += 1
         return (infected)
-    
+
     def get_infected_var(self, observables):
         """
             A method to calculate the variance of a list
             of observables.
         """
         return (np.var(observables))
-    
+
     def get_avg_obs(self, observables):
         """
             A method to calculate the average of a list
@@ -129,7 +130,7 @@ class SIRS(object):
         plt.colorbar()
         plt.savefig("phase_diagram.png")
         plt.show()
-    
+
     def plot_variance_contour(self, matrix, prob_step):
         """
             Phase diagram plotter - Each axis domain must be from
@@ -149,15 +150,34 @@ class SIRS(object):
         plt.colorbar()
         plt.savefig("variance_contour.png")
         plt.show()
-    
-    def plot_variance(self, p1s, var_array):
+
+    def plot_figure(self, x_data, var_data, error_data):
+        """
+            Method to plot the variance of
+            the SIRS model.
+        """
         plt.title('Variance of <I>/N (p3 = p2 = 0.5)')
         plt.xlabel('p1 (S --> I)')
-        plt.ylabel('VAR(<I>) / N')
-        plt.plot(p1s, var_array)
+        plt.ylabel('Variance')
+        plt.errorbar(x_data, var_data, yerr = error_data)
         plt.show()
-        
-    
+
+    def bootstrap(self, psis, samples):
+        """
+            Bootstrap method for generating error
+            values assocaited with the variance of
+            infected sites.
+        """
+        error_data = []
+        for i in range(samples):
+            sampling_data = []
+            for j in range(len(psis)):
+                r = np.random.randint(0, (len(psis)-1))
+                sampling_data.append(psis[r])
+            error_data.append(self.get_infected_var(sampling_data))
+        return math.sqrt(np.var(error_data))
+
+
     def animate(self, *args):
         """
             Creates, saves and returns image of the current state of
