@@ -2,6 +2,8 @@ from SIRS import SIRS
 import numpy as np
 import sys
 import matplotlib.pyplot as plt
+import math
+
 def main():
     if len(sys.argv) != 2:
         print("Wrong number of arguments.")
@@ -101,4 +103,44 @@ def main():
         # Plotting.
         simulation.plot_figure(p1s, var_array, error_array)
 
+    elif desired_plot == 'immunity':
+        # Initialising probabilities.
+        p1 = 0.5
+        p3 = 0.5
+        # Initialising x domain.
+        im_fracs = np.arange(0.0, 0.505, 0.05)
+        print(im_fracs.size)
+        overall_psis = []
+        errors = []
+        for k in range(5):
+            print(len(overall_psis))
+            # Data storage.
+            psi_per_k = []
+            # New simulation.
+            for frac in im_fracs:
+                psi_per_frac = []
+                simulation = SIRS(size=lattice_size,
+                                  ini=ini_cond, p1=p1, p2=p2, p3=p3)
+                # Creating immune sites.
+                for i in range(int(simulation.size[0]*simulation.size[1]*frac)):
+                    indices = (np.random.randint(0, simulation.size[0]),
+                               np.random.randint(0, simulation.size[1]))
+                    simulation.lattice[indices] = 2
+                # Sweeping.
+                for sweep in range(sweeps * 10):
+                    for j in range(simulation.size[0]*simulation.size[1]):
+                            simulation.update_SIRS()
+                    if sweep >= eqm_sweeps:
+                            psi_per_frac.append(simulation.get_infected_frac() / (simulation.size[0] * simulation.size[1]))
+                psi_per_k.append(simulation.get_avg_obs(psi_per_frac))
+            overall_psis.append(psi_per_k)
+        for vals in np.array(overall_psis).T:
+            errors.append(np.std(vals)/math.sqrt(len(vals)))
+        y_data = np.mean(overall_psis, axis = 0)
+
+        plt.title('Infected Sites vs. Immune Fraction')
+        plt.xlabel('Immune Fraction')
+        plt.ylabel('Infected Fraction')
+        plt.errorbar(im_fracs, y_data, yerr = errors)
+        plt.show()
 main()
