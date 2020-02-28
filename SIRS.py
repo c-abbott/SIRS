@@ -150,6 +150,14 @@ class SIRS(object):
         plt.savefig("variance_contour.png")
         plt.show()
     
+    def plot_variance(self, p1s, var_array):
+        plt.title('Variance of <I>/N (p3 = p2 = 0.5)')
+        plt.xlabel('p1 (S --> I)')
+        plt.ylabel('VAR(<I>) / N')
+        plt.plot(p1s, var_array)
+        plt.show()
+        
+    
     def animate(self, *args):
         """
             Creates, saves and returns image of the current state of
