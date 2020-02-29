@@ -169,15 +169,19 @@ class SIRS(object):
             values assocaited with the variance of
             infected sites.
         """
+        # Bootstrap resampling.
         error_data = []
         for i in range(samples):
             sampling_data = []
             for j in range(len(psis)):
-                r = np.random.randint(0, (len(psis)-1))
+                r = np.random.randint(0, len(psis))
                 sampling_data.append(psis[r])
-            error_data.append(self.get_infected_var(sampling_data))
-        return (math.sqrt(np.var(error_data)) / (self.size[0]*self.size[1]))
-
+            error_data.append(self.get_infected_var(sampling_data) / (self.size[0] * self.size[1]))
+        # Finding overall error.
+        avg_error_sq = (sum(error_data) / len(error_data))**2
+        sq_errors = [val**2 for val in error_data]
+        avg_sq_error =  sum(sq_errors) / len(sq_errors)
+        return (math.sqrt(avg_sq_error - avg_error_sq))
 
     def animate(self, *args):
         """

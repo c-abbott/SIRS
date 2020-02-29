@@ -98,6 +98,7 @@ def main():
             var_array[i] = simulation.get_infected_var(psis) / \
                 (simulation.size[0] * simulation.size[1])
             error_array[i] = simulation.bootstrap(psis, 100)
+
         # Plotting.
         simulation.plot_figure(p1s, var_array, error_array)
 
