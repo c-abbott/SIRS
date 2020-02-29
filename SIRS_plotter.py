@@ -114,9 +114,9 @@ def main():
         im_fracs = np.arange(0.0, 0.505, 0.05)
         # Data storage.
         overall_psis = []
-        errors = []
+        im_errors = []
         # Looping to generate errorbars.
-        for k in range(5):
+        for k in range(10):
             print(len(overall_psis))
             # Data storage.
             psi_per_k = []
@@ -143,14 +143,19 @@ def main():
             overall_psis.append(psi_per_k)
         # Computing errors.
         for vals in np.array(overall_psis).T:
-            errors.append(np.std(vals)/math.sqrt(len(vals)))
+            im_errors.append(np.std(vals)/math.sqrt(len(vals)))
         # Generating y_data.
         infected_fracs = np.mean(overall_psis, axis = 0)
+
         # Plotting.
         plt.title('Infected Sites vs. Immune Fraction')
         plt.xlabel('Immune Fraction')
         plt.ylabel('Infected Fraction')
-        plt.errorbar(im_fracs, infected_fracs, yerr = errors)
+        plt.errorbar(im_fracs, infected_fracs, yerr = im_errors)
         plt.savefig("immunity_plot.png")
         plt.show()
+        
+        # Writing to file.
+        with open("immunity.dat", "w+") as f:
+            f.writelines(map("{}, {}, {}\n".format, im_fracs, infected_fracs, im_errors))
 main()
