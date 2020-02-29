@@ -115,6 +115,7 @@ def main():
         # Data storage.
         overall_psis = []
         errors = []
+        # Looping to generate errorbars.
         for k in range(5):
             print(len(overall_psis))
             # Data storage.
@@ -134,16 +135,22 @@ def main():
                     for j in range(simulation.size[0]*simulation.size[1]):
                             simulation.update_SIRS()
                     if sweep >= eqm_sweeps:
+                            # Storing infected sites per frac.
                             psi_per_frac.append(simulation.get_infected() / (simulation.size[0] * simulation.size[1]))
+                # Storing averages.            
                 psi_per_k.append(simulation.get_avg_obs(psi_per_frac))
+            # Storing data from each simulation.
             overall_psis.append(psi_per_k)
+        # Computing errors.
         for vals in np.array(overall_psis).T:
             errors.append(np.std(vals)/math.sqrt(len(vals)))
-        y_data = np.mean(overall_psis, axis = 0)
-
+        # Generating y_data.
+        infected_fracs = np.mean(overall_psis, axis = 0)
+        # Plotting.
         plt.title('Infected Sites vs. Immune Fraction')
         plt.xlabel('Immune Fraction')
         plt.ylabel('Infected Fraction')
-        plt.errorbar(im_fracs, y_data, yerr = errors)
+        plt.errorbar(im_fracs, infected_fracs, yerr = errors)
+        plt.savefig("immunity_plot.png")
         plt.show()
 main()
