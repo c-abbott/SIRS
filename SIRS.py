@@ -85,7 +85,7 @@ class SIRS(object):
             if r_3 <= self.p3:
                 self.lattice[indices] = -1
 
-    def get_infected_frac(self):
+    def get_infected(self):
         """
             Class method to calculate the fraction
             of infected sites in the SIRS model.
@@ -176,7 +176,7 @@ class SIRS(object):
                 r = np.random.randint(0, (len(psis)-1))
                 sampling_data.append(psis[r])
             error_data.append(self.get_infected_var(sampling_data))
-        return math.sqrt(np.var(error_data))
+        return (math.sqrt(np.var(error_data)) / (self.size[0]*self.size[1]))
 
 
     def animate(self, *args):
@@ -194,8 +194,8 @@ class SIRS(object):
             Used in partnership with the tester file
             to run the simulation.
         """
-        self.it_per_sweep = it_per_sweep
         self.figure = plt.figure()
+        self.it_per_sweep = it_per_sweep
         self.image = plt.imshow(self.lattice, cmap='jet', animated=True)
         self.animation = animation.FuncAnimation(self.figure, self.animate, repeat=False, frames=sweeps, interval=50, blit=True)
         plt.colorbar(ticks=np.linspace(-1, 1, 3))

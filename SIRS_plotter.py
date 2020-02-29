@@ -50,8 +50,8 @@ def main():
                     for j in range(simulation.size[0]*simulation.size[1]):
                         simulation.update_SIRS()
                     if sweep >= eqm_sweeps:
-                        psi_per_p3.append(simulation.get_infected_frac())
-                        #psi = simulation.get_infected_frac()
+                        psi_per_p3.append(simulation.get_infected())
+                        #psi = simulation.get_infected()
                         #if psi != 0:
                         #    psi_per_p3.append(psi)
                         #else:
@@ -93,12 +93,11 @@ def main():
                 for j in range(simulation.size[0]*simulation.size[1]):
                         simulation.update_SIRS()
                 if sweep >= eqm_sweeps:
-                        psis.append(simulation.get_infected_frac())
+                        psis.append(simulation.get_infected())
             # Update arrays.
             var_array[i] = simulation.get_infected_var(psis) / \
                 (simulation.size[0] * simulation.size[1])
-            error_array[i] = simulation.bootstrap(psis, 100) / \
-                (simulation.size[0] * simulation.size[1])
+            error_array[i] = simulation.bootstrap(psis, 100)
         # Plotting.
         simulation.plot_figure(p1s, var_array, error_array)
 
@@ -134,7 +133,7 @@ def main():
                     for j in range(simulation.size[0]*simulation.size[1]):
                             simulation.update_SIRS()
                     if sweep >= eqm_sweeps:
-                            psi_per_frac.append(simulation.get_infected_frac() / (simulation.size[0] * simulation.size[1]))
+                            psi_per_frac.append(simulation.get_infected() / (simulation.size[0] * simulation.size[1]))
                 psi_per_k.append(simulation.get_avg_obs(psi_per_frac))
             overall_psis.append(psi_per_k)
         for vals in np.array(overall_psis).T:
