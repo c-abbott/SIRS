@@ -26,6 +26,7 @@ def main():
         eqm_sweeps = int(items[5])   # Equilibrium sweeps.
         sweeps = int(items[6])       # No. of sweeps.
 
+    # Heatmap plot.
     if desired_plot == 'heatmap':
         # Initialising probability domains.
         p1s = np.arange(0.0, 1.0 + p_step, p_step)
@@ -49,18 +50,22 @@ def main():
                 for sweep in range(sweeps):
                     for j in range(simulation.size[0]*simulation.size[1]):
                         simulation.update_SIRS()
-                    if sweep >= eqm_sweeps:
+                    # Get data.
+                    if sweep >= eqm_sweeps and simulation.get_infected() != 0:
                         psi_per_p3.append(simulation.get_infected())
-                        #psi = simulation.get_infected()
-                        #if psi != 0:
-                        #    psi_per_p3.append(psi)
-                        #else:
-                        #    break
+                    # Stop when absorbing state reached.
+                    elif sweep >= eqm_sweeps:
+                        break
                 # Data collection.
-                psi_per_p1.append(simulation.get_avg_obs(
-                    psi_per_p3) / (simulation.size[0]*simulation.size[1]))
-                var_data.append(simulation.get_infected_var(
-                    psi_per_p3) / (simulation.size[0]*simulation.size[1]))
+                if len(psi_per_p3) != 0:
+                    psi_per_p1.append(simulation.get_avg_obs(
+                        psi_per_p3) / (simulation.size[0]*simulation.size[1]))
+                    var_data.append(simulation.get_infected_var(
+                        psi_per_p3) / (simulation.size[0]*simulation.size[1]))
+                else:
+                    psi_per_p1.append(0.0)
+                    var_data.append(0.0)
+
             # Update matrix columns.
             phase_matrix[:, int(p1*(p1s.size-1))] = psi_per_p1
             var_matrix[:, int(p1*(p1s.size-1))] = var_data
@@ -70,9 +75,16 @@ def main():
         simulation.plot_variance_contour(var_matrix, p_step)
 
         # Writing to file.
-        np.savetxt("phase_data.dat", phase_matrix, fmt='%1.5f', delimiter=' ')
-        np.savetxt("var_data.dat", var_matrix, fmt='%1.5f', delimiter=' ')
+        np.savetxt("phase_data.dat", phase_matrix, fmt='%1.5f', delimiter=' ', 
+                    newline = '\n# p1 = [0.0, 0.025, ..., 1.0]' + ' p3 = [0.0, 0.025, ..., 1.0]\n',
+                    header = 'Phase Diagram Raw Data'
+                    )
+        np.savetxt("var_data.dat", var_matrix, fmt='%1.5f', delimiter=' ',
+                    newline = '\n# p1 = [0.0, 0.025, ..., 1.0]' + ' p3 = [0.0, 0.025, ..., 1.0\n',
+                    header = 'Phase Diagram Variance Raw Data'
+                    )
 
+    # Variance cut plot.
     elif desired_plot == 'variance_plot':
         # Initialising probability domains.
         p1s = np.arange(0.2, 0.51, 0.01)
@@ -105,19 +117,20 @@ def main():
         # Writing to a file.
         with open("var_cut.dat", "w+") as f:
             f.writelines(map("{}, {}, {}\n".format, p1s, var_array, error_array))
-
+            
+    # Immunity plot.
     elif desired_plot == 'immunity':
         # Initialising probabilities.
         p1 = 0.5
         p3 = 0.5
         # Initialising x domain.
-        im_fracs = np.arange(0.0, 0.505, 0.05)
+        im_fracs = np.arange(0.0, 0.525, 0.025)
         # Data storage.
         overall_psis = []
         im_errors = []
         # Looping to generate errorbars.
-        for k in range(10):
-            print(len(overall_psis))
+        for k in range(5):
+            print(k)
             # Data storage.
             psi_per_k = []
             # New simulation.
@@ -154,7 +167,7 @@ def main():
         plt.errorbar(im_fracs, infected_fracs, yerr = im_errors)
         plt.savefig("immunity_plot.png")
         plt.show()
-        
+
         # Writing to file.
         with open("immunity.dat", "w+") as f:
             f.writelines(map("{}, {}, {}\n".format, im_fracs, infected_fracs, im_errors))
