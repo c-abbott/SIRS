@@ -27,8 +27,10 @@ def main():
         eqm_times = []
         # Simulation begins.
         for i in range(simulations):
+            print(i)
             live_cells = []
             game = GOL(size=lattice_size, ini=ini_cond)
+            # Whilst not in EQM.
             while game.eqm == False:
                 # Evolve state.
                 game.evolve_state()
@@ -39,11 +41,13 @@ def main():
             # Minus 3 to account for check_eqm.
             eqm_times.append(len(live_cells) - 3)
             print (eqm_times[i])
+
         # Plotting.
-        game.plot_hist(eqm_times, np.arange(0, 2500, 100))
+        game.plot_hist(eqm_times, np.arange(0, 3000, 100))
 
         # Writing to file.
         with open("gol_eqm_hist.dat", "w+") as f:
+            f.write("GOL Sweeps to Reach Equilibrium\n")
             for time in eqm_times:
                 f.write('%lf\n' % time)
 
@@ -53,9 +57,10 @@ def main():
         y_pos = []
         times = []
         plot_all = True
+        meas_skips = 10
         # Simulation begins.
         for i in range(simulations):
-            for j in range(10):
+            for j in range(meas_skips):
                 game.evolve_state()
             # Find live cells of glider.
             xs = game.get_glider_pos()[0]
@@ -65,8 +70,8 @@ def main():
             # Store COM pos if not at lattice boundary.
             if x_checker == False and y_checker == False:
                 times.append(i)
-                x_pos.append(game.get_com(xs, ys)[0] / 10)
-                y_pos.append(game.get_com(xs, ys)[1] / 10)
+                x_pos.append(game.get_com(xs, ys)[0] / meas_skips)
+                y_pos.append(game.get_com(xs, ys)[1] / meas_skips)
 
         # Printing glider velocity.
         vel = game.plot_traj(times, x_pos, all=plot_all)

@@ -164,9 +164,8 @@ class GOL(object):
             for the GOL.
         """
         if len(live_cells) > 3:
-                if live_cells[len(live_cells)-1] == live_cells[len(live_cells)-2] \
-                    and live_cells[len(live_cells)-2] == live_cells[len(live_cells)-3]:
-                    self.eqm = True
+            if live_cells[-1] == live_cells[-2] and live_cells[-2] == live_cells[-3]:
+                self.eqm = True
 
     def boundary_checker(self, x_indices, y_indices):
         """
@@ -223,11 +222,11 @@ class GOL(object):
             Histogram plotter for
             steady state times.
         """
-        plt.grid()
         plt.title("Histogram of GOL EQM Times")
         plt.xlabel("Time (Sweeps)")
         plt.ylabel("Frequency")
         plt.hist(data, num_bins, facecolor='green')
+        plt.savefig('gol_eqm_hist.png')
         plt.show()
 
     def plot_traj(self, x_data, y_data, all):
@@ -242,8 +241,10 @@ class GOL(object):
             plt.xlabel("Time (Sweeps)")
             p = np.polyfit(x_data[:18], y_data[:18], 1)
             y_fit = np.array(x_data[:18])*p[0] + p[1]
-            plt.plot(x_data[:18], y_fit)
+            plt.plot(x_data[:18], y_fit, label ="x(t) = " + str(p[0]) +"t + " + str(p[1]))
+            plt.legend(loc = 'upper left')
             plt.scatter(x_data[:18], y_data[:18])
+            plt.savefig('single_glider_vel.png')
             plt.show()
             return(p[0])
         else:
@@ -252,6 +253,7 @@ class GOL(object):
             plt.ylabel("x(t)")
             plt.xlabel("Time (Sweeps)")
             plt.scatter(x_data, y_data)
+            plt.savefig('all_glider_vel.png')
             plt.show()
 
     def animate(self, *args):
