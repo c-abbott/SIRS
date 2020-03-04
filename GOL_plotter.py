@@ -30,17 +30,28 @@ def main():
             print(i)
             live_cells = []
             game = GOL(size=lattice_size, ini=ini_cond)
+            # Counter.
+            sweeps = 0 
             # Whilst not in EQM.
             while game.eqm == False:
                 # Evolve state.
                 game.evolve_state()
+                # Update sweeps.
+                sweeps += 1
                 # Count number of live cells in state.
                 live_cells.append(game.count_live())
                 # Steady state determination.
                 game.check_eqm(live_cells)
-            # Minus 3 to account for check_eqm.
-            eqm_times.append(len(live_cells) - 3)
-            print (eqm_times[i])
+                # Prevents infinite loop.
+                if sweeps == 4000:
+                    break
+            # Data storing.
+            if sweeps == 4000:
+                pass
+            else:
+                # Minus 3 to account for check_eqm.
+                eqm_times.append(len(live_cells) - 3)
+                print (eqm_times[i])
 
         # Plotting.
         game.plot_hist(eqm_times, np.arange(0, 3000, 100))
